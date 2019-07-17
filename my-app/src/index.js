@@ -57,6 +57,7 @@ class Game extends React.Component {
     this.state = {
       history: [{
         squares: Array(9).fill(null),
+        places: Array(10).fill(null),
       }],
       stepNumber: 0,
       xIsNext: true,
@@ -68,15 +69,18 @@ class Game extends React.Component {
     const history = this.state.history.slice(0, this.state.stepNumber + 1);
     const current = history[history.length - 1];
     const squares = current.squares.slice();
+    const places = current.places.slice();
     if (calculateWinner(squares) || squares[i]) {
       return;
     }
     squares[i] = this.state.xIsNext ? 'X' : 'O';
+    places[this.state.stepNumber] = i;
     this.setState({
       history: history.concat(
         [
           {
             squares: squares,
+            places: places,
           }
         ]
       ),
@@ -100,9 +104,14 @@ class Game extends React.Component {
       const desc = move ?
         'Go to move #' + move :
         'Go to game start';
+      const pair = i2cr(step.places[move-1])
+      const place = !move ? null : 'Place : (' + pair[0] + ',' +pair[1] + ')' 
       return (
         <li key={move}>
-          <button onClick={() => this.jumpTo(move)}>{desc}</button>
+          <button onClick={() => this.jumpTo(move)}>
+            <div>{desc}</div>
+            <div>{place}</div> 
+          </button>
         </li>
       );
     });
@@ -152,7 +161,20 @@ function calculateWinner(squares) {
   return null;
 }
 
+
+
 ReactDOM.render(
   <Game />,
   document.getElementById('root')
 );
+
+// 追加機能；履歴内のそれぞれの着手の位置を (col, row) というフォーマットで表示する。
+
+function i2cr(i) {
+  const pair = [Math.floor(i / 3) + 1, i % 3 + 1];
+  return pair;
+}
+
+for (let i = 0; i < 9; i++) {
+console.log(i2cr(i))
+}

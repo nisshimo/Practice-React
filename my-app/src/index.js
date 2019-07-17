@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 
 function Square(props) {
+  // props（onClick, value)を受け取ってSquaeのJXSを返す
   return (
     <button
       className="square"
@@ -14,7 +15,9 @@ function Square(props) {
 }
 
 class Board extends React.Component {
+  
   renderSquare(i) {
+    // Squares are hold as list. This function receive index i (int) and return Square property.
     return (
       <Square
         value={this.props.squares[i]}
@@ -24,6 +27,7 @@ class Board extends React.Component {
   }
 
   render() {
+    // This fuctio n display 9 squares with renderSquare function.
     return (
       <div>
         <div className="board-row">
@@ -48,6 +52,7 @@ class Board extends React.Component {
 
 class Game extends React.Component {
   constructor(props) {
+    // This functioln is called when the class where this function belong, initializing variables and properties.
     super(props);
     this.state = {
       history: [{
@@ -59,6 +64,7 @@ class Game extends React.Component {
   }
 
   handleClick(i) {
+    // when the bottun is clicked, inner state is changed.
     const history = this.state.history.slice(0, this.state.stepNumber + 1);
     const current = history[history.length - 1];
     const squares = current.squares.slice();
@@ -125,14 +131,8 @@ class Game extends React.Component {
   }
 }
 
-// ========================================
-
-ReactDOM.render(
-  <Game />,
-  document.getElementById('root')
-);
-
 function calculateWinner(squares) {
+  // receive squares list and judge if the game is finished or not.
   const lines = [
     [0, 1, 2],
     [3, 4, 5],
@@ -151,3 +151,8 @@ function calculateWinner(squares) {
   }
   return null;
 }
+
+ReactDOM.render(
+  <Game />,
+  document.getElementById('root')
+);
